@@ -9,15 +9,6 @@ const REPRS: [i32; 10] = [
     0b01111111, 0b01101111,
 ];
 
-// Possible numbers for the number of active bits
-// A number is identified by its bit in a bit field
-const NUMS_FOR_2: &[i32] = &[1];
-const NUMS_FOR_3: &[i32] = &[7];
-const NUMS_FOR_4: &[i32] = &[4];
-const NUMS_FOR_5: &[i32] = &[2, 3, 5];
-const NUMS_FOR_6: &[i32] = &[0, 6, 9];
-const NUMS_FOR_7: &[i32] = &[8];
-
 #[derive(Debug, PartialEq, Eq, Clone)]
 struct Sample {
     samples: Vec<i32>,
@@ -103,8 +94,6 @@ fn deduce(sample: &Sample) -> DeductionMatrix {
         for idx in indices {
             matrix.wires[idx] &= REPRS[1];
         }
-
-        //println!("{:#?}", matrix);
     }
 
     // Pass 2: Deduce wire a from 7
@@ -125,8 +114,6 @@ fn deduce(sample: &Sample) -> DeductionMatrix {
                 }
             }
         }
-
-        //println!("{:#?}", matrix);
     }
 
     // Pass 3: Restrict wires d and b from 4
@@ -139,8 +126,6 @@ fn deduce(sample: &Sample) -> DeductionMatrix {
                 matrix.wires[idx] = (1 << 3) | (1 << 1);
             }
         }
-
-        //println!("{:#?}", matrix);
     }
 
     // Pass 4: Solve all except g using 0, 6, 9
@@ -173,8 +158,6 @@ fn deduce(sample: &Sample) -> DeductionMatrix {
             }
         }
 
-        //println!("{:#?}", matrix);
-
         // Pass 4.b: Assign the other two bits
         for idx in indices.iter() {
             if matrix.wires[*idx] & (1 << 3) > 0 {
@@ -187,8 +170,6 @@ fn deduce(sample: &Sample) -> DeductionMatrix {
 
                     matrix.wires[i] &= !(1 << 3);
                 }
-
-                //println!("{:#?}", matrix);
             } else if matrix.wires[*idx] & (1 << 2) > 0 {
                 matrix.wires[*idx] = 1 << 2;
 
@@ -199,8 +180,6 @@ fn deduce(sample: &Sample) -> DeductionMatrix {
 
                     matrix.wires[i] &= !(1 << 2);
                 }
-
-                //println!("{:#?}", matrix);
             }
         }
     }
